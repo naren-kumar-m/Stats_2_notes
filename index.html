@@ -1,1 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W4_L1: What is a Basis for a Vector Space?</title>
+  <!-- MathJax for rendering LaTeX equations -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+      --success: #4ade80;
+      --warning: #fbbf24;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+    header {
+      background: linear-gradient(135deg, #0284c7 0%, #1e1b4b 100%);
+      padding: 48px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    header .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+    header p { color: #cbd5e1; max-width: 650px; margin: 0 auto; }
+    .container { max-width: 960px; margin: 32px auto; padding: 0 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+    h2 {
+      color: var(--accent);
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    h3 { color: #e2e8f0; font-size: 1.1rem; margin: 18px 0 8px; }
+    p, li { color: #cbd5e1; margin-bottom: 10px; }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    .definition-box {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+    .formula-box {
+      background: #090d16;
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 14px 0;
+      text-align: center;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .mini-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 8px;
+    }
+    .sim-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .control-group {
+      background: rgba(15, 23, 42, 0.7);
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .control-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+    .input-row { display: flex; gap: 8px; align-items: center; }
+    input[type="number"] {
+      width: 100%;
+      padding: 6px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    canvas {
+      width: 100%;
+      max-width: 500px;
+      height: 360px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+    .status-banner {
+      text-align: center;
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .video-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .video-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
 
+  <header>
+    <div class="badge">IIT Madras BS Degree • Maths 2</div>
+    <h1>Week 4, Lecture 1: What is a Basis for a Vector Space?</h1>
+    <p>Interactive study guide covering Linear Independence, Span, Spanning Sets, and Basis in $\mathbb{R}^n$.</p>
+    <a class="video-link" href="https://www.youtube.com/watch?v=lhAQIaFOPxA" target="_blank">▶ Watch Lecture on YouTube</a>
+  </header>
+
+  <div class="container">
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>1. Review: Linear Dependence & Independence</h2>
+      <p>Let $\{v_1, v_2, \dots, v_n\}$ be a set of $n$ vectors in a vector space $V$.</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Linearly Dependent</h3>
+          <p>There exist scalars $a_1, a_2, \dots, a_n$ <strong>not all zero</strong> such that:</p>
+          <p>$$a_1 v_1 + a_2 v_2 + \dots + a_n v_n = 0$$</p>
+          <p>In $\mathbb{R}^n$, the matrix system $Vx = 0$ has a <strong>non-trivial solution</strong>.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Linearly Independent</h3>
+          <p>The <strong>only</strong> choice of scalars satisfying</p>
+          <p>$$a_1 v_1 + a_2 v_2 + \dots + a_n v_n = 0$$</p>
+          <p>is $a_1 = a_2 = \dots = a_n = 0$. Thus, $Vx = 0$ has only the trivial zero solution.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>2. Span of a Set of Vectors</h2>
+      <div class="definition-box">
+        <strong>Definition (Span):</strong> The span of a set $S$ of vectors, denoted $\text{span}(S)$, is the set of all finite linear combinations of vectors in $S$:
+        $$\text{span}(S) = \left\{ \sum_{i=1}^{k} a_i v_i \;\middle|\; v_i \in S, \; a_i \in \mathbb{R} \right\}$$
+      </div>
+      <p><strong>Key Property:</strong> $\text{span}(S)$ is always a subspace of $V$ (it contains the $0$ vector and is closed under linear combinations).</p>
+      <h3>Geometric Examples</h3>
+      <ul>
+        <li><strong>Single vector in $\mathbb{R}^2$:</strong> If $S = \{(1, 0)\}$, then $\text{span}(S) = \{(a, 0) \mid a \in \mathbb{R}\}$, which is the <strong>x-axis</strong>.</li>
+        <li><strong>Diagonal line in $\mathbb{R}^2$:</strong> If $S = \{(1, 1)\}$, then $\text{span}(S) = \{(a, a) \mid a \in \mathbb{R}\}$, which is the line $y = x$.</li>
+        <li><strong>Plane in $\mathbb{R}^3$:</strong> If $S = \{(1, 0, 0), (0, 1, 0)\}$, then $\text{span}(S) = \{(a, b, 0) \mid a, b \in \mathbb{R}\}$, which is the <strong>xy-plane</strong>.</li>
+      </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>3. Spanning Sets & Building by Appending</h2>
+      <p>A set $S \subseteq V$ is a <strong>spanning set</strong> for $V$ if $\text{span}(S) = V$ (every vector in $V$ can be written as a linear combination of vectors in $S$).</p>
+      <ul>
+        <li>If $T \subseteq S$, then $\text{span}(T) \subseteq \text{span}(S)$. Every superset of a spanning set is also a spanning set.</li>
+        <li>By convention (empty linear combination), $\text{span}(\emptyset) = \{0\}$.</li>
+      </ul>
+
+      <h3>Iterative Construction in $\mathbb{R}^3$ (Appending Outside the Span)</h3>
+      <ol>
+        <li><strong>Step 0:</strong> $S_0 = \emptyset \implies \text{span}(S_0) = \{(0,0,0)\}$ (Origin).</li>
+        <li><strong>Step 1:</strong> Pick $(0,2,1) \notin \text{span}(S_0) \implies S_1 = \{(0,2,1)\}$ (Spans a 1D line).</li>
+        <li><strong>Step 2:</strong> Pick $(2,2,0) \notin \text{span}(S_1) \implies S_2 = \{(0,2,1), (2,2,0)\}$ (Spans a 2D plane).</li>
+        <li><strong>Step 3:</strong> Pick $(0,0,5) \notin \text{span}(S_2) \implies S_3 = \{(0,2,1), (2,2,0), (0,0,5)\}$ (Spans all of $\mathbb{R}^3$).</li>
+      </ol>
+      <div class="formula-box">
+        For any $(x, y, z) \in \mathbb{R}^3$:
+        $$(x, y, z) = \left(\frac{y - x}{2}\right)(0, 2, 1) + \left(\frac{x}{2}\right)(2, 2, 0) + \left(\frac{x - y + 2z}{10}\right)(0, 0, 5)$$
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>4. Basis of a Vector Space</h2>
+      <div class="definition-box">
+        <strong>Definition (Basis):</strong> A subset $B \subseteq V$ is a <strong>basis</strong> of $V$ if:
+        <ol style="margin-top:8px; margin-bottom:0;">
+          <li>$B$ is <strong>linearly independent</strong>, and</li>
+          <li>$B$ <strong>spans $V$</strong> ($\text{span}(B) = V$).</li>
+        </ol>
+      </div>
+      <p><strong>The Optimal Balance:</strong> A spanning set must be large enough to generate every vector in $V$, while a linearly independent set in $\mathbb{R}^n$ can have at most $n$ vectors. A basis hits the exact sweet spot.</p>
+      <h3>The Standard Basis for $\mathbb{R}^n$</h3>
+      <p>Let $e_i$ be the vector with $1$ in the $i$-th coordinate and $0$ everywhere else. Then $E = \{e_1, e_2, \dots, e_n\}$ is the standard basis for $\mathbb{R}^n$ because any $x = (x_1, \dots, x_n)$ is uniquely written as $x = \sum_{i=1}^n x_i e_i$.</p>
+    </div>
+
+    <!-- Interactive Visualizer -->
+    <div class="card">
+      <h2>5. Interactive $\mathbb{R}^2$ Basis & Span Explorer</h2>
+      <p>Adjust vectors $v_1$, $v_2$, and target vector $b = (x, y)$ below to test whether $\{v_1, v_2\}$ forms a valid basis for $\mathbb{R}^2$ and find the linear combination $c_1 v_1 + c_2 v_2 = b$.</p>
+
+      <div class="sim-controls">
+        <div class="control-group">
+          <label>Vector $v_1 = (x_1, y_1)$</label>
+          <div class="input-row">
+            <input type="number" id="v1x" value="1" step="0.5" oninput="updateSim()">
+            <input type="number" id="v1y" value="1" step="0.5" oninput="updateSim()">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Vector $v_2 = (x_2, y_2)$</label>
+          <div class="input-row">
+            <input type="number" id="v2x" value="0" step="0.5" oninput="updateSim()">
+            <input type="number" id="v2y" value="1" step="0.5" oninput="updateSim()">
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Target $b = (x, y)$</label>
+          <div class="input-row">
+            <input type="number" id="bx" value="3" step="0.5" oninput="updateSim()">
+            <input type="number" id="by" value="2" step="0.5" oninput="updateSim()">
+          </div>
+        </div>
+      </div>
+
+      <canvas id="basisCanvas" width="500" height="360"></canvas>
+      <div id="statusBox" class="status-banner"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById('basisCanvas');
+    const ctx = canvas.getContext('2d');
+    const statusBox = document.getElementById('statusBox');
+
+    function drawArrow(x1, y1, x2, y2, color, label) {
+      const headlen = 10;
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const angle = Math.atan2(dy, dx);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText(label, x2 + 6, y2 - 6);
+      }
+    }
+
+    function updateSim() {
+      const v1x = parseFloat(document.getElementById('v1x').value) || 0;
+      const v1y = parseFloat(document.getElementById('v1y').value) || 0;
+      const v2x = parseFloat(document.getElementById('v2x').value) || 0;
+      const v2y = parseFloat(document.getElementById('v2y').value) || 0;
+      const bx = parseFloat(document.getElementById('bx').value) || 0;
+      const by = parseFloat(document.getElementById('by').value) || 0;
+
+      const ox = canvas.width / 2;
+      const oy = canvas.height / 2;
+      const scale = 32;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw coordinate grid
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = ox % scale; x < canvas.width; x += scale) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = oy % scale; y < canvas.height; y += scale) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // Axes
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(canvas.width, oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, canvas.height); ctx.stroke();
+
+      const det = v1x * v2y - v1y * v2x;
+
+      if (Math.abs(det) > 1e-6) {
+        const c1 = (bx * v2y - by * v2x) / det;
+        const c2 = (v1x * by - v1y * bx) / det;
+
+        // Dashed parallelogram components
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+        ctx.beginPath();
+        ctx.moveTo(ox + c1 * v1x * scale, oy - c1 * v1y * scale);
+        ctx.lineTo(ox + bx * scale, oy - by * scale);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        statusBox.style.background = 'rgba(74, 222, 128, 0.15)';
+        statusBox.style.color = '#4ade80';
+        statusBox.innerHTML = `✔ Valid Basis for R² (Linearly Independent, det = ${det.toFixed(2)})<br>` +
+          `Target b = (${c1.toFixed(2)})·v₁ + (${c2.toFixed(2)})·v₂`;
+      } else {
+        statusBox.style.background = 'rgba(251, 191, 36, 0.15)';
+        statusBox.style.color = '#fbbf24';
+        statusBox.innerHTML = `⚠ Linearly Dependent (det = 0) — Does NOT form a basis for R².<br>` +
+          `Span is restricted to a 1D line or origin.`;
+      }
+
+      drawArrow(ox, oy, ox + v1x * scale, oy - v1y * scale, '#38bdf8', 'v₁');
+      drawArrow(ox, oy, ox + v2x * scale, oy - v2y * scale, '#a855f7', 'v₂');
+      drawArrow(ox, oy, ox + bx * scale, oy - by * scale, '#4ade80', 'b');
+    }
+
+    updateSim();
+  </script>
+</body>
+</html>
